@@ -1,0 +1,74 @@
+body {
+    padding-left: 5em;
+    padding-top: 5em;
+}
+h1 {
+    display: inline;
+    margin-bottom: 3em;
+}
+.blink {
+    animation: blinker 1s linear infinite;
+}
+nav {
+    padding-top: 10em;
+    position: fixed;
+    text-align: right;
+}
+.main {
+    padding-top: 3em;
+    width: 50%;
+}
+.content {
+    margin-top: 3em;
+}
+
+.terminal {
+    background-color: white;
+    color: rgb(232, 62, 140) !important;
+    display: inline !important;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    height: auto !important;
+    line-height: 21px !important;
+    text-align: left !important;
+    width: auto !important;
+    word-break: break-word !important;
+}
+
+.sign {
+	display: inline-block;
+	background-color: #007bff;
+	/* Button background color */
+	color: #fff;
+	/* Button text color */
+	padding: 8px 10px;
+	/* Button padding */
+	text-decoration: none;
+	/* Remove underline from the link */
+	border: none;
+	/* Remove button border */
+	border-radius: 5px;
+	/* Apply border radius */
+	transition: background-color 0.3s ease;
+	/* Smooth transition for background color */
+}
+
+.sign:hover {
+	background-color: #0056b3;
+	/* Change background color on hover */
+}
+
+.sign a {
+	color: inherit;
+	/* Inherit text color from parent button */
+	text-decoration: none;
+	/* Remove underline from the link */
+}
+
+.sign a:hover {
+	color: inherit;
+	/* Inherit text color from parent button on hover */
+	text-decoration: none;
+	/* Remove underline from the link on hover */
+}

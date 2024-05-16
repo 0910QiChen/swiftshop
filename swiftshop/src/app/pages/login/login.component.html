@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="login.component.css">
+<title>login</title>
+
+<div class="wrapper row">
+  <main class="col-md-10">
+    <div>
+      <div class="container header">
+        <h1>Login</h1>
+      </div>
+      
+      <div class="container content">
+        <div class="container">
+          <div class="SignUp">
+            <button class="sign">
+              <a href="http://localhost:4200/signup"> Sign Up </a>
+            </button>
+          </div>
+          <h4>Login credentials</h4>
+          <form #login = "ngForm" (ngSubmit)="onLogin(login.value)" >
+            <div class="input-box">
+              <input
+                type="text"
+                class="form-control mb-2 mr-sm-2" 
+                id="username"
+                name= "username"
+                ngModel placeholder="username">
+            </div>
+            <div class="input-box">
+              <input
+                type="text"
+                class="form-control mb-2 mr-sm-2" 
+                id="password"
+                name= "password"
+                ngModel placeholder="password">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Log In</button>
+          </form>
+        </div>
+      </div>
+      <div *ngIf="loginStatus">{{ loginStatus }}</div>
+    </div>
+  </main>
+</div>
