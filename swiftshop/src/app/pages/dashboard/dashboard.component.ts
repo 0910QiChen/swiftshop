@@ -41,12 +41,12 @@ export class DashboardComponent implements OnInit {
   addToCart(item: Item) {
     const quantity = this.quantities[item.ItemID] || 1;
     this.dashService.addToCart(item.ItemID, quantity).subscribe(
-      (response: string) => {
+      (response) => {
         console.log(response)
-        this.dashStatus = response;
+        this.dashStatus = response.message;
       },
-      (error: any) => {
-        console.error('Error adding to cart', error);
+      (error) => {
+        console.error('Error adding to cart:', error);
         this.dashStatus = error;
       }
     )

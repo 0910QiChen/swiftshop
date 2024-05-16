@@ -185,12 +185,17 @@ def view_cart():
     
     cursor.execute('SELECT * FROM Cart WHERE UserID = ?', user_id)
     cart = cursor.fetchall()
+
+    if not cart:
+        return jsonify({'error': 'Your Cart is Empty!'}), 404
+
     result_list = []
 
     for itemID in cart:
         cursor.execute('SELECT * FROM Items Where ItemID = ?', itemID[2])
         item = cursor.fetchone()
         item_dict = {
+            'CartID': itemID[0],
             'ItemID': itemID[2],
             'ItemName': item[1],
             'ItemDesc': item[2],
@@ -202,17 +207,17 @@ def view_cart():
     return jsonify(json_result), 200
 
 # Delete items from cart
-@app.route('/deletefromcart/<int:item_id>', methods=['DELETE'])
-def delete_from_cart(item_id):
+@app.route('/deletefromcart/<int:cart_id>', methods=['DELETE'])
+def delete_from_cart(cart_id):
 
-    cursor.execute('SELECT * FROM Cart Where ItemID = ?', item_id)
+    cursor.execute('SELECT * FROM Cart Where CartID = ?', cart_id)
     item = cursor.fetchone()
     if not item:
         return jsonify({'error': 'Item does not exist in the cart'}), 400
 
-    cursor.execute('DELETE FROM Cart WHERE ItemID = ?', item_id)
+    cursor.execute('DELETE FROM Cart WHERE CartID = ?', cart_id)
     conn.commit()
-    return jsonify({'message': 'Item removed from cart successfully'}), 200
+    return jsonify({'message': 'Item successfully removed from cart'}), 200
 
 # Change quantity of items
 @app.route('/changequantity/<int:item_id>', methods=['POST'])
@@ -229,14 +234,15 @@ def generate_tracking_number(length=20):
     return ''.join(random.choice(chars) for _ in range(length))
 
 # Ordering cart items
-@app.route('/order', methods=['POST'])
+@app.route('/placeorder', methods=['POST'])
 @jwt_required()
-def order():
+def placeorder():
     user_id = get_jwt_identity()
     cursor.execute('SELECT * FROM Shopusers WHERE UserID = ?', user_id)
     user = cursor.fetchone()
     if not user:
         return jsonify({'error': 'You must be a user to order items'}), 404
+    
     cursor.execute('SELECT * FROM Cart WHERE UserID = ?', user_id)
     order_list = cursor.fetchall()
     tracking_number = generate_tracking_number()
@@ -247,7 +253,7 @@ def order():
         item_name = item[1]
         quantity = items[3]
         price = item[3]*quantity
-        cursor.execute('INSERT INTO OrderItems (TrackingNumber, UserID, ItemID, ItemName, Quantity, Price) VALUES (?, ?, ?, ?, ?)', tracking_number, user_id, item_id, item_name, quantity, price)
+        cursor.execute('INSERT INTO OrderItems (TrackingNumber, UserID, ItemID, ItemName, Quantity, Price) VALUES (?, ?, ?, ?, ?, ?)', tracking_number, user_id, item_id, item_name, quantity, price)
         conn.commit()
         cursor.execute('DELETE FROM Cart WHERE ItemID = ?', item_id)
         conn.commit()
@@ -270,7 +276,7 @@ def get_tracking_numbers():
     tracking = []
     for trackingNumber in trackingNumbers:
         track_dict = {
-            'TrackingNumber': trackingNumber['TrackingNumber'],
+            'TrackingNumber': trackingNumber[1],
         }
         tracking.append(track_dict)
     json_result = json.dumps(tracking)
@@ -302,10 +308,6 @@ def get_order_history():
         log_dict['Price'] = float(log_dict['Price'])
 
         log_dict['OrderDate'] = log_dict['OrderDate'].isoformat()
-
-        log_dict = {
-
-        }
 
         history.append(log_dict)
 

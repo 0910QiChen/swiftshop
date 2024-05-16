@@ -18,16 +18,28 @@ export class HistoryComponent implements OnInit {
   tracking_number!: string;
 
   ngOnInit(): void {
-    this.loadAccounts();
+    this.loadOrders();
   }
 
   constructor(private orderService: OrderService) { }
 
-  loadAccounts() {
+  loadOrders() {
     this.orderService.loadTrackingNumber().subscribe(
       (response: string) => {
         const jsonResponse = JSON.parse(response); // Parse the JSON string
         this.trackingNumbers = jsonResponse as TrackingNumbers[]; // Map the parsed data into the accounts array
+        const uniqueTrackingNumbers = new Set<string>(); // Set to store unique tracking numbers
+
+        // Filter out duplicate tracking numbers
+        const filteredTrackingNumbers = this.trackingNumbers.filter((trackingNumber) => {
+        if (!uniqueTrackingNumbers.has(trackingNumber.TrackingNumber)) {
+          uniqueTrackingNumbers.add(trackingNumber.TrackingNumber);
+          return true; // Include this tracking number in the result array
+        }
+        return false; // Skip this tracking number
+      });
+
+      this.trackingNumbers = filteredTrackingNumbers; // Assign unique tracking numbers to the array
       },
       (error) => {
         console.error('Error fetching tracking numbers:', error);

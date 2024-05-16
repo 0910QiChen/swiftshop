@@ -14,20 +14,6 @@ export class OrderService {
 
     constructor(private http: HttpClient, private jwtService : JwtService) { }
 
-    placeOrder(): Observable<any> {
-        const token = this.jwtService.getToken()
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.post<any>(`${this.apiUrl}/order`, { headers }).pipe(
-            catchError(error => {
-                let errorMessage = 'An unknown error occurred';
-                if (error.error && error.error.error) {
-                  errorMessage = error.error.error;
-                }
-                return throwError(errorMessage);
-              })
-        );
-    }
-
     loadTrackingNumber(): Observable<any> {
         const token = this.jwtService.getToken()
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -45,7 +31,8 @@ export class OrderService {
     showLog(TrackingNumber: string): Observable<any> {
         const token = this.jwtService.getToken()
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.post<any>(`${this.apiUrl}/orderhistory`, TrackingNumber, { headers }).pipe(
+        const data = { TrackingNumber }
+        return this.http.post<any>(`${this.apiUrl}/orderhistory`, data, { headers }).pipe(
             catchError(error => {
                 let errorMessage = 'An unknown error occurred';
                 if (error.error && error.error.error) {

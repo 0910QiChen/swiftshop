@@ -27,7 +27,7 @@ export class LoginComponent {
       this.router.navigateByUrl('/dashboard');
     },
     error => {
-      console.error('Login failed: ', error);
+      console.error('Login failed:', error);
       this.loginStatus = error;
     });
   }

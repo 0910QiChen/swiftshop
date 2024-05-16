@@ -53,4 +53,18 @@ export class CartService {
           })
         );
     }
+
+    placeOrders(): Observable<any> {
+      const token = this.jwtService.getToken()
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.post<any>(`${this.apiUrl}/placeorder`, null, { headers }).pipe(
+        catchError(error => {
+          let errorMessage = 'An unknown error occurred';
+          if (error.error && error.error.error) {
+            errorMessage = error.error.error;
+          }
+          return throwError(errorMessage);
+        })
+      );
+    }
 }

@@ -26,7 +26,7 @@ export class CartComponent implements OnInit {
       (response: any) => {
         console.log(response);
         const jsonResponse = JSON.parse(response); // Parse the JSON string
-        this.carts = jsonResponse as Cart[]; // Map the parsed data into the logs array
+        this.carts = jsonResponse as Cart[];      // Map the parsed data into the cart array
         this.carts.forEach(item => {item.totalPrice = item.Price * item.Quantity});
       },
       (error) => {
@@ -36,14 +36,16 @@ export class CartComponent implements OnInit {
     )
   }
 
-  deleteItem(itemID: number) {
-    this.cartService.deleteItem(itemID).subscribe(
+  deleteItem(cartID: number) {
+    this.cartService.deleteItem(cartID).subscribe(
       (response) => {
         console.log(response);
-        this.carts=this.carts.filter(item => item.ItemID !== itemID)
+        this.carts=this.carts.filter(item => item.CartID !== cartID)
+        this.cartStatus = response.message
       },
       (error) => {
-        console.error('Error deleteing item', error);
+        console.error('Error deleteing item:', error);
+        this.cartStatus = error
       }
     )
   }
@@ -53,19 +55,37 @@ export class CartComponent implements OnInit {
       (reponse) => {
         console.log(reponse);
         item.totalPrice = item.Price * item.Quantity;
+        this.cartStatus = reponse.message
       },
       (error) => {
-        console.error('Error changing quantity', error);
+        console.error('Error changing quantity:', error);
+        this.cartStatus = error;
+      }
+    )
+  }
+
+  placeOrder() {
+    this.cartService.placeOrders().subscribe(
+      (reponse: any) => {
+        console.log(reponse);
+        this.cartStatus = reponse.message
+        this.carts = []
+      },
+      (error: any) => {
+        console.error('Error placing order:', error);
+        this.cartStatus = error;
       }
     )
   }
 }
 
 export interface Cart {
+  CartID: number,
   ItemID: number,
   ItemName: string,
   ItemDesc: string,
   Quantity: number,
-  Price: number
-  totalPrice: number
+  Price: number,
+  totalPrice: number,
+  selected: boolean
 }

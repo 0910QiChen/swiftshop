@@ -16,6 +16,9 @@
                 <li class="nav-item">
                   <a href ="/history" routerLinkActive="active">History</a>
                 </li>
+                <li class="nav-item">
+                  <a href ="/login" routerLinkActive="active">Login</a>
+                </li>
               </ul>
         </nav>
       </div>
@@ -28,6 +31,7 @@
             <div class="content">
               <div class="content">
                 <div class="container">
+                  <div *ngIf="cartStatus">{{ cartStatus }}</div>
                     <section class="item-overview">
                         <ng-container If="response; else noItems">
                           <ul>
@@ -40,8 +44,11 @@
                                 <input type="number" id="quantity" name="quantity" class="form-control" [(ngModel)]="cart.Quantity">
                               </div>
                               <button (click)="changeQuantity(cart)" class="btn btn-outline-primary">Update Quantity</button>
-                              <button (click)="deleteItem(cart.ItemID)" class="btn btn-outline-primary">Remove from cart</button>
+                              <button (click)="deleteItem(cart.CartID)" class="btn btn-outline-primary">Remove from cart</button>
                             </li>
+                            <div>
+                              <button (click) = "placeOrder()" class = "btn btn-outline-primary">Order</button>
+                            </div>
                           </ul>
                         </ng-container>
                         <ng-template #noItems>
