@@ -12,7 +12,6 @@ import { OrderService } from '../../services/order.service';
 })
 export class HistoryComponent implements OnInit {
 
-  logStatus!: string;
   logs: Log[] = [];
   trackingNumbers: TrackingNumbers[] = [];
   tracking_number!: string;
@@ -37,13 +36,12 @@ export class HistoryComponent implements OnInit {
           return true; // Include this tracking number in the result array
         }
         return false; // Skip this tracking number
-      });
+        });
 
-      this.trackingNumbers = filteredTrackingNumbers; // Assign unique tracking numbers to the array
+        this.trackingNumbers = filteredTrackingNumbers; // Assign unique tracking numbers to the array
       },
       (error) => {
         console.error('Error fetching tracking numbers:', error);
-        this.logStatus = error;
       }
     );
   }
@@ -57,7 +55,6 @@ export class HistoryComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching orders:', error);
-        this.logStatus = error;
       }
     )
   }

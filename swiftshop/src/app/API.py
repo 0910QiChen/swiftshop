@@ -73,16 +73,16 @@ def create_user():
     email = cursor.fetchone()
 
     if user or email:
-        return jsonify({'message': 'Username or Email Existed'}), 400
+        return jsonify({'error': 'Username or Email Existed'}), 400
 
     if not validate_username(Username):
-        return jsonify({'message': 'Username must be at least 8 characters(lower case, uppercase or digits) long'}), 400
+        return jsonify({'error': 'Username must be at least 8 characters(lower case, uppercase or digits) long'}), 400
 
     if not validate_email(Email):
-        return jsonify({'message': 'Please enter valid email address'}), 400
+        return jsonify({'error': 'Please enter valid email address'}), 400
 
     if not validate_password(Password):
-        return jsonify({'message': 'Password must be at least 8 characters(lower case, uppercase or digits) long'}), 400
+        return jsonify({'error': 'Password must be at least 8 characters(lower case, uppercase or digits) long'}), 400
 
     if not all(key in data for key in ('Username', 'PasswordHash')):
         return jsonify({'error': 'Missing username or password'}), 400
@@ -299,7 +299,7 @@ def get_order_history():
     cursor.execute('SELECT * FROM OrderItems WHERE TrackingNumber = ?', data['TrackingNumber'])
     logs = cursor.fetchall()
     if not logs:
-        return jsonify({'error': 'No logs exist'}), 400
+        return jsonify({'error': 'Please select an order'}), 400
 
     history = []
     for log in logs:
