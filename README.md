@@ -19,7 +19,7 @@ Now, you're all set up with Angular, and SQL Server Management Studio! Happy cod
 
 ## Frontend
 
-To run the frontend, navigate to the `BankingApp` directory and use the following command:
+To run the frontend, navigate to the `swiftshop` directory and use the following command:
 
 ```terminal
 cd swiftshop/swiftshop/src/app
